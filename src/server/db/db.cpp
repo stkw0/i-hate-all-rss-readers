@@ -1,0 +1,43 @@
+#include <iostream>
+
+#include "db.hpp"
+
+DB::DB(const std::string db_file) : _db{db_file} {
+    _db << "create table if not exists users (\
+        id bigint(20) DEFAULT NULL,\
+        username varchar(255) DEFAULT NULL,\
+        password varchar(255) DEFAULT NULL,\
+        email varchar(255) DEFAULT NULL\
+        )";
+
+    _db << "create table if not exists feeds (\
+        id bigint(20) DEFAULT NULL,\
+        username varchar(255) DEFAULT NULL,\
+        url varchar(255) DEFAULT NULL\
+        )";
+}
+
+void DB::registerUser(const std::string& user, const std::string& password,
+                      const std::string& email) {
+    _db << "INSERT INTO users (id, username, password, email) \
+        VALUES (0, \'" +
+               user + "\', \'" + password + "\', \'" + email + "\')";
+}
+
+std::string DB::getUserPassword(const std::string& user) {
+    std::string pass;
+
+    _db << "select password from users where username == ? ;" << user >> pass;
+    return pass;
+}
+
+void DB::addFeed(const std::string& user, const std::string& feed) {
+    _db << "INSERT INTO feeds (id, username, url) \
+        VALUES (0, \'" +
+               user + "\', \'" + feed + "\')";
+}
+
+void DB::getFeeds(const std::string& user) {
+    _db << "select url from feeds where username == ? ;" << user >>
+        [&](std::string url) { std::cout << url << std::endl; };
+}

@@ -1,0 +1,11 @@
+workspace:
+  base: .
+  path: /
+
+pipeline:
+  build:
+    image: gentoo/stage3-amd64
+    commands:
+      - emerge --sync
+      - emerge -q spdlog meson
+

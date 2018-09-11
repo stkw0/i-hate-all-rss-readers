@@ -1,0 +1,12 @@
+comm.cpp
+comm.h
+main.cpp
+widgets/configuration.cpp
+widgets/configuration.h
+widgets/configuration.ui
+widgets/mainwindow.cpp
+widgets/mainwindow.h
+widgets/mainwindow.ui
+widgets/newchannel.cpp
+widgets/newchannel.h
+widgets/newchannel.ui
