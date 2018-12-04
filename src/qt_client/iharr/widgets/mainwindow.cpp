@@ -25,7 +25,10 @@ MainWindow::MainWindow(QWidget* parent)
     {
         Command cmd{_c, "get_feeds"};
         cmd.addArg("username", _cfg.getUsername().toStdString());
+        cmd.addArg("token", _token);
         cmd.send();
+
+        for(auto& v : cmd.getArgsAsList()) ui->listWidget->addItem(v.c_str());
     }
 }
 

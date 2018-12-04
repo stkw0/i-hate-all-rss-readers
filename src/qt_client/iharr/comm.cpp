@@ -44,18 +44,17 @@ void Command::send() {
 
     if(response.empty()) return;
 
-    auto parsed_response = json::parse(response);
-    _answer = parsed_response["answer"];
-
-    // json library workaround
-    args_t tmp = parsed_response["args"];
-    _args = tmp;
+    _received = json::parse(response);
 }
 
 const std::string Command::getAnswer() const {
-    return _answer;
+    return _received["answer"];
 }
 
 const args_t Command::getArgs() const {
-    return _args;
+    return _received["args"];
+}
+
+const std::vector<std::string> Command::getArgsAsList() const {
+    return _received["args"];
 }

@@ -2,12 +2,8 @@
 #include <iostream>
 
 #include <jwt/jwt_all.h>
-#include <nlohmann/json.hpp>
 
-#include "env.hpp"
 #include "executer.hpp"
-
-using json = nlohmann::json;
 
 std::string Executer::interpretPacket(const std::string& packet) {
     if(packet == "") return packet;
@@ -47,7 +43,7 @@ CommandResult Executer::cmd_login(args_t& args) try {
     std::string username = args["username"];
     std::string password = args["password"];
 
-    HS256Validator signer(iharr::getenv("IHARR_SECRET"));
+    HS256Validator signer(_secret);
     json payload = {{"user", username}};
     auto token = JWT::Encode(signer, payload);
 
@@ -82,12 +78,8 @@ CommandResult Executer::cmd_add_feed(args_t& args) try {
     auto url = args["url"];
     auto token = args["token"];
 
-    HS256Validator signer(iharr::getenv("IHARR_SECRET"));
-
-    json header, payload;
-    std::tie(header, payload) = JWT::Decode(token, &signer);
-    std::cout << "Header: " << header << std::endl;
-    std::cout << "Payload: " << payload << std::endl;
+    HS256Validator signer(_secret);
+    auto [header, payload] = JWT::Decode(token, &signer);
 
     _db.addFeed(payload["user"], url);
 
@@ -97,9 +89,14 @@ CommandResult Executer::cmd_add_feed(args_t& args) try {
 }
 
 CommandResult Executer::cmd_get_feeds(args_t& args) try {
-    _db.getFeeds(args["username"]);
+    auto token = args["token"];
 
-    return CommandResult{"", "OK"};
+    HS256Validator signer(_secret);
+    auto [header, payload] = JWT::Decode(token, &signer);
+
+    auto feeds = _db.getFeeds(args["username"]);
+
+    return CommandResult{"", "OK", feeds};
 } catch(std::exception& e) {
     return CommandResult{"Error occured while getting feeds", ""};
 }

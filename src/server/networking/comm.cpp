@@ -27,6 +27,6 @@ std::string Comm::readPacket() {
 }
 
 void Comm::writePacket(std::string& p) {
-    std::cout << p << std::endl;
+    // std::cout << p << std::endl;
     socket.send(boost::asio::buffer(p.c_str(), p.length()));
 }

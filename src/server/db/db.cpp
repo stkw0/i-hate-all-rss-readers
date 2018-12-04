@@ -37,7 +37,10 @@ void DB::addFeed(const std::string& user, const std::string& feed) {
                user + "\', \'" + feed + "\')";
 }
 
-void DB::getFeeds(const std::string& user) {
+std::vector<std::string> DB::getFeeds(const std::string& user) {
+    std::vector<std::string> feeds;
     _db << "select url from feeds where username == ? ;" << user >>
-        [&](std::string url) { std::cout << url << std::endl; };
+        [&](std::string url) { feeds.emplace_back(url); };
+
+    return feeds;
 }

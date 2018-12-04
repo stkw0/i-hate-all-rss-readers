@@ -3,14 +3,20 @@
 #include <string>
 #include <unordered_map>
 
+#include <nlohmann/json.hpp>
+
 #include "package/package.hpp"
 #include "db/db.hpp"
 #include "logging.hpp"
+#include "env.hpp"
+
+using json = nlohmann::json;
+
 
 struct CommandResult {
 	std::string error;
 	std::string answer;
-	args_t args;
+	json args;
 };
 
 	using args_t = std::unordered_map<std::string, std::string>;
@@ -29,5 +35,7 @@ private:
 	DB _db{"/tmp/lol"};
 
 	spdlogger _log{NewLogger("executer")};
+
+	const std::string _secret{iharr::getenv("IHARR_SECRET")};
 
 };

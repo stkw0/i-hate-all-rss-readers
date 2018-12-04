@@ -3,6 +3,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 #include <QtNetwork>
 #include <QString>
@@ -42,14 +43,12 @@ public:
 
 	const std::string getAnswer() const;
 	const args_t getArgs() const;
-
+	const std::vector<std::string> getArgsAsList() const;
 
 private:
 	Comm& _conn;
 	json _packet;
-
-	std::string _answer;
-	args_t _args;
+	json _received;
 
 	spdlogger _log{NewLogger("command")};
 

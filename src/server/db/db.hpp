@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #include <sqlite_modern_cpp.h>
 
@@ -19,7 +20,7 @@ public:
 	void registerUser(const std::string& user, const std::string& password, const std::string& email);
 
 	void addFeed(const std::string& user, const std::string& feed);
-	void getFeeds(const std::string& user);
+	std::vector<std::string> getFeeds(const std::string& user);
 
 private:
 
