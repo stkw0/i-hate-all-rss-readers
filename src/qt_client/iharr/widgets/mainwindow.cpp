@@ -20,7 +20,8 @@ MainWindow::MainWindow(QWidget* parent)
         cmd.addArg("password", _cfg.getPassword().toStdString());
         cmd.send();
 
-        if(cmd.getAnswer() != "") _token = cmd.getArgs().at("token");
+        if(cmd.getAnswer() == "") return;
+        _token = cmd.getArgs().at("token");
     }
     {
         Command cmd{_c, "get_feeds"};
