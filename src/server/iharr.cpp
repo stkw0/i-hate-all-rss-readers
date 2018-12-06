@@ -11,6 +11,7 @@ IHARR::~IHARR() {
 }
 
 void IHARR::run() {
+    _log->info("Server initalized");
     while(1) {
         auto comm = new Comm;
         comm->listen("0.0.0.0", 1234);

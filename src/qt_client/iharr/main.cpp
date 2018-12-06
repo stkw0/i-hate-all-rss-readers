@@ -1,7 +1,9 @@
 #include <iostream>
 
-#include "widgets/mainwindow.h"
 #include <QApplication>
+#include <QMessageBox>
+
+#include "widgets/mainwindow.h"
 
 int main(int argc, char* argv[]) {
     QApplication a(argc, argv);
@@ -12,7 +14,9 @@ int main(int argc, char* argv[]) {
         return a.exec();
     } catch(std::exception& e) {
         std::cout << e.what() << std::endl;
+        QMessageBox::critical(a.activeWindow(), "IHARR", e.what(), QMessageBox::Ok);
     } catch(...) {
         std::cout << "Unknown error\n";
+        QMessageBox::critical(a.activeWindow(), "IHARR", "Unknown error", QMessageBox::Ok);
     }
 }

@@ -10,6 +10,8 @@ Comm::~Comm() {
 }
 
 void Comm::connect(const QString& host) {
+    _log->info("Connecting to {}", host.toStdString());
+
     socket.connectToHost(host, 1234);
     if(!socket.waitForConnected()) qDebug(socket.errorString().toLatin1());
 }
