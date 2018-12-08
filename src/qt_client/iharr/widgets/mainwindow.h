@@ -38,6 +38,8 @@ private slots:
 
     void update_login();
 
+    void on_listWidget_2_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
+
 private:
 
     bool eventFilter(QObject *obj, QEvent *event);

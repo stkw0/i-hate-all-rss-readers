@@ -6,6 +6,7 @@
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "utils.hpp"
 
 using json = nlohmann::json;
 
@@ -19,19 +20,7 @@ MainWindow::MainWindow(QWidget* parent)
 
     _c.connect("127.0.0.1");
 
-    Config _cfg{"iharr_qt"};
-
-    {
-        Command cmd{_c, "login"};
-        cmd.addArg("username", _cfg.getUsername().toStdString());
-        cmd.addArg("password", _cfg.getPassword().toStdString());
-        cmd.send();
-
-        if(cmd.getAnswer() == "") return;
-        _token = cmd.getArgs().at("token");
-    }
-
-    update_feeds();
+    update_login();
 }
 
 MainWindow::~MainWindow() {
@@ -48,7 +37,16 @@ void MainWindow::on_actionChannel_triggered() {
 
 void MainWindow::on_listWidget_currentItemChanged(QListWidgetItem* current,
                                                   QListWidgetItem* previous) {
-    if(current) ui->webEngineView->load(current->text());
+    if(current) {
+        auto p = GetPArsedFeed(current->text().toStdString());
+        std::cout << "AA\n";
+        std::cout << p["items"] << std::endl;
+        for(auto& e : p["items"]) {
+            std::cout << e << std::endl;
+            ui->listWidget_2->addItem(std::string(e["url"]).c_str());
+        }
+        //   ui->webEngineView->load(current->text());
+    }
 }
 
 void MainWindow::update_feeds() {
@@ -59,15 +57,13 @@ void MainWindow::update_feeds() {
 void MainWindow::update_login() {
     Config _cfg{"iharr_qt"};
 
-    {
-        Command cmd{_c, "login"};
-        cmd.addArg("username", _cfg.getUsername().toStdString());
-        cmd.addArg("password", _cfg.getPassword().toStdString());
-        cmd.send();
+    Command cmd{_c, "login"};
+    cmd.addArg("username", _cfg.getUsername().toStdString());
+    cmd.addArg("password", _cfg.getPassword().toStdString());
+    cmd.send();
 
-        if(cmd.getAnswer() == "") return;
-        _token = cmd.getArgs().at("token");
-    }
+    if(cmd.getAnswer() == "") return;
+    _token = cmd.getArgs().at("token");
 
     update_feeds();
 }
@@ -89,4 +85,9 @@ bool MainWindow::eventFilter(QObject* obj, QEvent* event) {
     } else {
         return QObject::eventFilter(obj, event);
     }
+}
+
+void MainWindow::on_listWidget_2_currentItemChanged(QListWidgetItem* current,
+                                                    QListWidgetItem* previous) {
+    if(current) ui->webEngineView->load(current->text());
 }

@@ -12,10 +12,17 @@ run_command(['clang-format','-i','-style=file','-assume-filename=.clang-format',
 yaml_cpp = cxx.find_library('yaml-cpp')
 fmt_lib = cxx.find_library('fmt')
 
+poco_dep = [
+	cxx.find_library('PocoNet'),
+	cxx.find_library('PocoFoundation'),
+	cxx.find_library('PocoNetSSL'),
+	cxx.find_library('ssl'),
+]
+
 
 #translations = qt5.compile_translations(ts_files : 'myTranslation_fr.ts', build_by_default : true)
 executable('iharr_qt', sources, moc_files,
             include_directories : [inc, global_inc],
             link_with: iharr_lib,
-            dependencies : [qt5_dep, yaml_cpp, fmt_lib])
+            dependencies : [qt5_dep, yaml_cpp, fmt_lib, poco_dep])
 

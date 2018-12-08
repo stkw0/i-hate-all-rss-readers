@@ -1,9 +1,12 @@
 #pragma once
 
-#include <regex>
 #include <string>
+#include <iostream>
 
-bool IsValidURL(const std::string& url) {
-    std::regex r("(?:http|https)://([\\S]+[^<>]*)");
-    return std::regex_match(url, r);
-}
+#include <nlohmann/json.hpp>
+
+using json = nlohmann::json;
+
+bool IsValidURL(const std::string& url);
+
+json GetPArsedFeed(const std::string& url);

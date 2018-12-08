@@ -11,10 +11,17 @@ boost_dep = [
 yaml_cpp = cxx.find_library('yaml-cpp')
 fmt_lib = cxx.find_library('fmt')
 
+poco_dep = [
+	cxx.find_library('PocoNet'),
+	cxx.find_library('PocoFoundation'),
+	cxx.find_library('PocoNetSSL'),
+	cxx.find_library('ssl'),
+]
+
 
 iharr_lib = library(
     'iharr', 
     sources,
     #include_directories : inc,
-    dependencies: [ yaml_cpp, boost_dep, fmt_lib ],
+    dependencies: [ yaml_cpp, boost_dep, fmt_lib, poco_dep ],
 	install : true)

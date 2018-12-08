@@ -51,12 +51,12 @@ CommandResult Executer::cmd_login(args_t& args) try {
     json payload = {{"user", username}};
     auto token = JWT::Encode(signer, payload);
 
-    args_t args;
-    args["token"] = token;
+    args_t ret_args;
+    ret_args["token"] = token;
 
     auto db_password = _db.getUserPassword(username);
 
-    return CommandResult{"", "Correctly loged", args};
+    return CommandResult{"", "Correctly loged", ret_args};
 } catch(std::exception& e) {
     return CommandResult{"Error while login: " + std::string(e.what()), ""};
 }

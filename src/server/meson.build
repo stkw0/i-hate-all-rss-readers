@@ -21,6 +21,13 @@ jwt_dep = [
 	cxx.find_library('ssl'),
 ]
 
+poco_dep = [
+	cxx.find_library('PocoNet'),
+	cxx.find_library('PocoFoundation'),
+	cxx.find_library('PocoNetSSL'),
+	cxx.find_library('ssl'),
+]
+
 fmt_lib = cxx.find_library('fmt')
 
 
@@ -28,7 +35,7 @@ iharrn = executable(
     'iharr', 
     sources,
     include_directories : [inc, global_inc],
-    dependencies: [ boost_dep, sql_dep, thread_dep, jwt_dep, fmt_lib],
+    dependencies: [ boost_dep, sql_dep, thread_dep, jwt_dep, fmt_lib, poco_dep],
     link_with: [iharr_lib],
 	install : true)
 
