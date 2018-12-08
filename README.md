@@ -8,4 +8,5 @@ A rss reader, if I don't procrastinate I would update the description
     - Organize code
     - Fix drone 
     - Handle errors
-
+    - Create tests
+    - Search a better name
