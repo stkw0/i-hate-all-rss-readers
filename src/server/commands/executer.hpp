@@ -30,6 +30,7 @@ private:
 	CommandResult cmd_login(args_t& args);
 	CommandResult cmd_register(args_t& args);
 	CommandResult cmd_add_feed(args_t& args);
+	CommandResult cmd_delete_feed(args_t& args);
 	CommandResult cmd_get_feeds(args_t& args);
 
 	DB _db{"/tmp/lol"};

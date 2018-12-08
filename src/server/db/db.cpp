@@ -37,6 +37,10 @@ void DB::addFeed(const std::string& user, const std::string& feed) {
                user + "\', \'" + feed + "\')";
 }
 
+void DB::deleteFeed(const std::string& user, const std::string& feed) {
+    _db << "DELETE FROM feeds WHERE username == ? AND url == ? ;" << user << feed;
+}
+
 std::vector<std::string> DB::getFeeds(const std::string& user) {
     std::vector<std::string> feeds;
     _db << "select url from feeds where username == ? ;" << user >>

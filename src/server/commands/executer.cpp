@@ -1,9 +1,11 @@
 #include <exception>
 #include <iostream>
+#include <stdexcept>
 
 #include <jwt/jwt_all.h>
 
 #include "executer.hpp"
+#include "utils.hpp"
 
 std::string Executer::interpretPacket(const std::string& packet) {
     if(packet == "") return packet;
@@ -32,6 +34,8 @@ CommandResult Executer::dispatchCommand(const std::string& cmd, args_t& args) {
         return cmd_register(args);
     } else if(cmd == "add_feed") {
         return cmd_add_feed(args);
+    } else if(cmd == "delete_feed") {
+        return cmd_delete_feed(args);
     } else if(cmd == "get_feeds") {
         return cmd_get_feeds(args);
     }
@@ -81,11 +85,27 @@ CommandResult Executer::cmd_add_feed(args_t& args) try {
     HS256Validator signer(_secret);
     auto [header, payload] = JWT::Decode(token, &signer);
 
+    if(!IsValidURL(url)) throw std::runtime_error("Invalid URL");
+
     _db.addFeed(payload["user"], url);
 
     return CommandResult{"", "Feed added"};
 } catch(std::exception& e) {
     return CommandResult{"Error occured while adding the feed", ""};
+}
+
+CommandResult Executer::cmd_delete_feed(args_t& args) try {
+    auto url = args["url"];
+    auto token = args["token"];
+
+    HS256Validator signer(_secret);
+    auto [header, payload] = JWT::Decode(token, &signer);
+
+    _db.deleteFeed(payload["user"], url);
+
+    return CommandResult{"", "Feed removed"};
+} catch(std::exception& e) {
+    return CommandResult{"Error occured while deleting feed", ""};
 }
 
 CommandResult Executer::cmd_get_feeds(args_t& args) try {
@@ -94,7 +114,7 @@ CommandResult Executer::cmd_get_feeds(args_t& args) try {
     HS256Validator signer(_secret);
     auto [header, payload] = JWT::Decode(token, &signer);
 
-    auto feeds = _db.getFeeds(args["username"]);
+    auto feeds = _db.getFeeds(payload["user"]);
 
     return CommandResult{"", "OK", feeds};
 } catch(std::exception& e) {
