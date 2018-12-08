@@ -10,3 +10,6 @@ A rss reader, if I don't procrastinate I would update the description
     - Handle errors
     - Create tests
     - Search a better name
+    - Organize header files 
+    - Create namespaces
+    - Create exceptions
