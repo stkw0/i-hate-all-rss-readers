@@ -44,3 +44,8 @@ void MainWindow::on_actionConfiguration_triggered() {
 void MainWindow::on_actionChannel_triggered() {
     _new_channel_wg.show();
 }
+
+void MainWindow::on_listWidget_currentItemChanged(QListWidgetItem* current,
+                                                  QListWidgetItem* previous) {
+    ui->webEngineView->load(current->text());
+}

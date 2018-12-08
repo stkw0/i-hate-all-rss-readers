@@ -4,6 +4,7 @@
 #include <string>
 
 #include <QMainWindow>
+#include <QListWidgetItem>
 
 #include "comm.h"
 #include "configuration.h"
@@ -26,6 +27,8 @@ private slots:
     void on_actionConfiguration_triggered();
 
     void on_actionChannel_triggered();
+
+    void on_listWidget_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
 private:
     std::string _token;

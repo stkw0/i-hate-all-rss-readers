@@ -1,4 +1,5 @@
 #include <iostream>
+#include <stdexcept>
 
 #include "comm.h"
 
@@ -13,7 +14,11 @@ void Comm::connect(const QString& host) {
     _log->info("Connecting to {}", host.toStdString());
 
     socket.connectToHost(host, 1234);
-    if(!socket.waitForConnected()) qDebug(socket.errorString().toLatin1());
+    if(!socket.waitForConnected()) {
+        auto err_msg = socket.errorString().toStdString();
+        _log->error(err_msg);
+        throw std::runtime_error(err_msg);
+    }
 }
 
 void Comm::write(const QByteArray& data) {
