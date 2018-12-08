@@ -32,9 +32,11 @@ private slots:
 
     void on_listWidget_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);
 
+    void on_listWidget_customContextMenuRequested(const QPoint &pos);
+
     void update_feeds();
 
-    void on_listWidget_customContextMenuRequested(const QPoint &pos);
+    void update_login();
 
 private:
 

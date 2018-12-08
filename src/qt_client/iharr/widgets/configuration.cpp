@@ -37,4 +37,5 @@ void Configuration::on_buttonBox_accepted() {
     cmd.addArg("password", pass.toStdString());
     cmd.addArg("email", email.toStdString());
     cmd.send();
+    emit on_config_change();
 }

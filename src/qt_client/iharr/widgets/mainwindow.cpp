@@ -15,6 +15,7 @@ MainWindow::MainWindow(QWidget* parent)
     ui->listWidget->installEventFilter(this);
 
     connect(&_new_channel_wg, &NewChannel::on_feed_added, this, &MainWindow::update_feeds);
+    connect(&_cfg_wg, &Configuration::on_config_change, this, &MainWindow::update_login);
 
     _c.connect("127.0.0.1");
 
@@ -30,7 +31,7 @@ MainWindow::MainWindow(QWidget* parent)
         _token = cmd.getArgs().at("token");
     }
 
-    for(auto& v : _feeds_cmd.getFeeds()) ui->listWidget->addItem(v.c_str());
+    update_feeds();
 }
 
 MainWindow::~MainWindow() {
@@ -53,6 +54,22 @@ void MainWindow::on_listWidget_currentItemChanged(QListWidgetItem* current,
 void MainWindow::update_feeds() {
     ui->listWidget->clear();
     for(auto& v : _feeds_cmd.getFeeds()) ui->listWidget->addItem(v.c_str());
+}
+
+void MainWindow::update_login() {
+    Config _cfg{"iharr_qt"};
+
+    {
+        Command cmd{_c, "login"};
+        cmd.addArg("username", _cfg.getUsername().toStdString());
+        cmd.addArg("password", _cfg.getPassword().toStdString());
+        cmd.send();
+
+        if(cmd.getAnswer() == "") return;
+        _token = cmd.getArgs().at("token");
+    }
+
+    update_feeds();
 }
 
 void MainWindow::on_listWidget_customContextMenuRequested(const QPoint& pos) {

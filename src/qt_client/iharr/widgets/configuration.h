@@ -19,6 +19,9 @@ public:
     explicit Configuration(Comm& c, QWidget *parent = 0);
     ~Configuration();
 
+signals:
+	void on_config_change();
+
 private slots:
     void on_buttonBox_accepted();
 
