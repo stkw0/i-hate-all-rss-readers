@@ -30,12 +30,14 @@ poco_dep = [
 
 fmt_lib = cxx.find_library('fmt')
 
+yaml_cpp = cxx.find_library('yaml-cpp')
+
 
 iharrn = executable(
     'iharr', 
     sources,
     include_directories : [inc, global_inc],
-    dependencies: [ boost_dep, sql_dep, thread_dep, jwt_dep, fmt_lib, poco_dep],
+    dependencies: [ boost_dep, sql_dep, thread_dep, jwt_dep, fmt_lib, poco_dep, yaml_cpp],
     link_with: [iharr_lib],
 	install : true)
 

@@ -9,6 +9,7 @@
 #include "db/db.hpp"
 #include "logging.hpp"
 #include "env.hpp"
+#include "config.hpp"
 
 using json = nlohmann::json;
 
@@ -33,7 +34,8 @@ private:
 	CommandResult cmd_delete_feed(args_t& args);
 	CommandResult cmd_get_feeds(args_t& args);
 
-	DB _db{"/tmp/lol"};
+	Config _cfg{"iharr"};
+	DB _db{_cfg.getDBPath()};
 
 	spdlogger _log{NewLogger("executer")};
 

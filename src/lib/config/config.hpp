@@ -29,12 +29,12 @@ protected:
         return e.as<T>();
     else
         return default_value;
-}
+	}
 
 	template<typename T>
 	T getVal(const std::string& key) {
     return _yaml_cfg[key].as<T>();
-}
+	}
 
 private:
 	YAML::Node _yaml_cfg;
