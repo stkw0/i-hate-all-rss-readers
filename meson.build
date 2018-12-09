@@ -8,7 +8,7 @@ project(
 add_global_arguments(['-Wall', '-Wextra'], language : 'cpp')
 add_global_arguments(['-DSPDLOG_NO_DATETIME', '-DSPDLOG_NO_THREAD_ID', '-DSPDLOG_FMT_EXTERNAL'], language : 'cpp')
 
-global_inc = include_directories('src/lib/')
+global_inc = include_directories('src/')
 
 cxx = meson.get_compiler('cpp')
 

@@ -4,7 +4,7 @@
 #include <spdlog/spdlog.h>
 
 #include "iharr.hpp"
-#include "logging.hpp"
+#include "lib/logging.hpp"
 
 int main() {
     auto console = NewLogger("main");

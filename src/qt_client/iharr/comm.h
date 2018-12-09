@@ -10,7 +10,7 @@
 #include <QByteArray>
 #include <nlohmann/json.hpp>
 
-#include "logging.hpp"
+#include "lib/logging.hpp"
 
 using json = nlohmann::json;
 using args_t = std::unordered_map<std::string, std::string>;

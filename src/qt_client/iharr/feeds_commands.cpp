@@ -17,9 +17,13 @@ void FeedsCommands::deleteFeed(const std::string& url) {
     cmd.send();
 }
 
-const std::vector<std::string> FeedsCommands::getFeeds() {
+const std::vector<QListWidgetItem*> FeedsCommands::getFeeds() {
+    std::vector<QListWidgetItem*> v;
     Command cmd{_c, "get_feeds"};
     cmd.addArg("token", _token);
     cmd.send();
-    return cmd.getArgsAsList();
+
+    for(auto&& e : cmd.getArgsAsList()) v.emplace_back(new QFeed(e));
+
+    return v;
 }

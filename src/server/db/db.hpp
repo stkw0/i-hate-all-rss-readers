@@ -15,6 +15,7 @@ public:
 	void addFeed(const std::string& user, const std::string& feed);
 	void deleteFeed(const std::string& user, const std::string& feed);
 	std::vector<std::string> getFeeds(const std::string& user);
+	std::vector<std::string> getItems(const std::string& user, const std::string& feed);
 
 private:
 

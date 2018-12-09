@@ -1,6 +1,6 @@
 #pragma once
 
-#include "config/config.hpp"
+#include "lib/config/config.hpp"
 
 
 class Config : BaseConfig {

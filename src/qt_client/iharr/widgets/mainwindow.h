@@ -10,7 +10,7 @@
 #include "comm.h"
 #include "configuration.h"
 #include "newchannel.h"
-#include "logging.hpp"
+#include "lib/logging.hpp"
 #include "feeds_commands.hpp"
 
 namespace Ui {

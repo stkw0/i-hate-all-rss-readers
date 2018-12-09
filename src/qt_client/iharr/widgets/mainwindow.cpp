@@ -2,11 +2,13 @@
 
 #include <QEvent>
 #include <QKeyEvent>
+#include <QMessageBox>
 #include <nlohmann/json.hpp>
 
+#include "feed.hpp"
+#include "lib/utils.hpp"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "utils.hpp"
 
 using json = nlohmann::json;
 
@@ -36,22 +38,26 @@ void MainWindow::on_actionChannel_triggered() {
 }
 
 void MainWindow::on_listWidget_currentItemChanged(QListWidgetItem* current,
-                                                  QListWidgetItem* previous) {
+                                                  QListWidgetItem* previous) try {
     if(current) {
-        auto p = GetPArsedFeed(current->text().toStdString());
-        std::cout << "AA\n";
-        std::cout << p["items"] << std::endl;
-        for(auto& e : p["items"]) {
-            std::cout << e << std::endl;
+        ui->listWidget_2->clear();
+        auto feed = static_cast<QFeed*>(current);
+        for(auto& e : feed->content()["items"]) {
             ui->listWidget_2->addItem(std::string(e["url"]).c_str());
         }
-        //   ui->webEngineView->load(current->text());
+        //   ui->webEngineView->load(feed->text());
     }
+} catch(std::exception& e) {
+    _log->critical("{}: {}", __PRETTY_FUNCTION__, e.what());
+    QMessageBox::critical(this, tr("IHARR"), tr(e.what()), QMessageBox::Ok);
 }
 
-void MainWindow::update_feeds() {
+void MainWindow::update_feeds() try {
     ui->listWidget->clear();
-    for(auto& v : _feeds_cmd.getFeeds()) ui->listWidget->addItem(v.c_str());
+    for(auto& v : _feeds_cmd.getFeeds()) ui->listWidget->addItem(v);
+} catch(std::exception& e) {
+    _log->critical("{}: {}", __PRETTY_FUNCTION__, e.what());
+    QMessageBox::critical(this, tr("IHARR"), tr(e.what()), QMessageBox::Ok);
 }
 
 void MainWindow::update_login() {

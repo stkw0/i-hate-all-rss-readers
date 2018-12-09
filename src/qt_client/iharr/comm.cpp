@@ -52,6 +52,8 @@ void Command::send() {
     if(response.empty()) return;
 
     _received = json::parse(response);
+
+    if(_received["error"] != "") throw std::runtime_error(_received["error"]);
 }
 
 const std::string Command::getAnswer() const {

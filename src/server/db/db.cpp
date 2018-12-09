@@ -13,7 +13,15 @@ DB::DB(const std::string db_file) : _db{db_file} {
     _db << "create table if not exists feeds (\
         id bigint(20) DEFAULT NULL,\
         username varchar(255) DEFAULT NULL,\
-        url varchar(255) DEFAULT NULL\
+        url varchar(255) DEFAULT NULL,\
+        readed bit DEFAULT NULL \
+        )";
+
+    _db << "create table if not exists items (\
+        id bigint(20) DEFAULT NULL,\
+        feed varchar(255) DEFAULT NULL,\
+        url varchar(255) DEFAULT NULL,\
+        readed bit DEFAULT NULL \
         )";
 }
 
@@ -47,4 +55,12 @@ std::vector<std::string> DB::getFeeds(const std::string& user) {
         [&](std::string url) { feeds.emplace_back(url); };
 
     return feeds;
+}
+
+std::vector<std::string> DB::getItems(const std::string& user, const std::string& feed) {
+    std::vector<std::string> items;
+    _db << "select url from items where username == ? AND feed == ? ;" << user << feed >>
+        [&](std::string url) { items.emplace_back(url); };
+
+    return items;
 }

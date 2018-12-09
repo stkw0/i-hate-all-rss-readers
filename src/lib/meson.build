@@ -22,6 +22,6 @@ poco_dep = [
 iharr_lib = library(
     'iharr', 
     sources,
-    #include_directories : inc,
+    include_directories : [global_inc],
     dependencies: [ yaml_cpp, boost_dep, fmt_lib, poco_dep ],
 	install : true)

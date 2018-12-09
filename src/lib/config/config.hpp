@@ -2,7 +2,7 @@
 
 #include <yaml-cpp/yaml.h>
 
-#include "path/path.hpp"
+#include "lib/path/path.hpp"
 
 
 static const std::string CONFIG_FOLDER = Expand("~/.config/iharr/");

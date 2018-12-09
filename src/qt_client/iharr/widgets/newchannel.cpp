@@ -4,9 +4,9 @@
 #include <QMessageBox>
 
 #include "comm.h"
+#include "lib/utils.hpp"
 #include "newchannel.h"
 #include "ui_newchannel.h"
-#include "utils.hpp"
 
 NewChannel::NewChannel(FeedsCommands& f, QWidget* parent)
     : _feeds_cmd{f}, QDialog(parent), ui(new Ui::NewChannel) {

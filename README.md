@@ -13,3 +13,7 @@ A rss reader, if I don't procrastinate I would update the description
     - Organize header files 
     - Create namespaces
     - Create exceptions
+    - Tray icon & notifications
+    - Options
+        - Timer to auto-update feeds
+        - Manually update feeds

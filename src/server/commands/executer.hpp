@@ -5,10 +5,10 @@
 
 #include <nlohmann/json.hpp>
 
-#include "package/package.hpp"
+#include "lib/package/package.hpp"
 #include "db/db.hpp"
-#include "logging.hpp"
-#include "env.hpp"
+#include "lib/logging.hpp"
+#include "lib/env.hpp"
 #include "config.hpp"
 
 using json = nlohmann::json;

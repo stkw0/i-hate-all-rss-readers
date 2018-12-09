@@ -4,7 +4,7 @@
 #include <memory>
 #include <vector>
 
-#include "logging.hpp"
+#include "lib/logging.hpp"
 #include "commands/executer.hpp"
 #include "networking/comm.hpp"
 

@@ -5,7 +5,7 @@
 #include <jwt/jwt_all.h>
 
 #include "executer.hpp"
-#include "utils.hpp"
+#include "lib/utils.hpp"
 
 std::string Executer::interpretPacket(const std::string& packet) {
     if(packet == "") return packet;
@@ -86,6 +86,10 @@ CommandResult Executer::cmd_add_feed(args_t& args) try {
     auto [header, payload] = JWT::Decode(token, &signer);
 
     if(!IsValidURL(url)) throw std::runtime_error("Invalid URL");
+
+    auto feeds = _db.getFeeds(payload["user"]);
+    for(auto&& f : feeds)
+        if(f == url) throw std::runtime_error("Feed already present");
 
     _db.addFeed(payload["user"], url);
 
