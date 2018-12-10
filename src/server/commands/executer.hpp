@@ -33,6 +33,9 @@ private:
 	CommandResult cmd_add_feed(args_t& args);
 	CommandResult cmd_delete_feed(args_t& args);
 	CommandResult cmd_get_feeds(args_t& args);
+	CommandResult cmd_add_item(args_t& args);
+	CommandResult cmd_get_items(args_t& args);
+
 
 	Config _cfg{"iharr"};
 	DB _db{_cfg.getDBPath()};

@@ -17,6 +17,9 @@ public:
 	const std::vector<QListWidgetItem*> getFeeds();
 
 private:
+	void addItem(const std::string& feed, const std::string& url);
+
+
 	Comm& _c;
 	const std::string& _token;
 

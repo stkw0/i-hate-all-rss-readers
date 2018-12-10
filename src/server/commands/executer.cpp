@@ -38,6 +38,10 @@ CommandResult Executer::dispatchCommand(const std::string& cmd, args_t& args) {
         return cmd_delete_feed(args);
     } else if(cmd == "get_feeds") {
         return cmd_get_feeds(args);
+    } else if(cmd == "add_item") {
+        return cmd_add_item(args);
+    } else if(cmd == "get_items") {
+        return cmd_get_items(args);
     }
 
     return CommandResult{"Invalid command", ""};
@@ -123,4 +127,38 @@ CommandResult Executer::cmd_get_feeds(args_t& args) try {
     return CommandResult{"", "OK", feeds};
 } catch(std::exception& e) {
     return CommandResult{"Error occured while getting feeds", ""};
+}
+
+CommandResult Executer::cmd_add_item(args_t& args) try {
+    auto feed = args["feed"];
+    auto url = args["url"];
+    auto token = args["token"];
+
+    HS256Validator signer(_secret);
+    auto [header, payload] = JWT::Decode(token, &signer);
+
+    if(!IsValidURL(url)) throw std::runtime_error("Invalid URL");
+
+    auto items = _db.getItems(payload["user"], feed);
+    for(auto&& i : items)
+        if(i == url) throw std::runtime_error("Feed already present");
+
+    _db.addItem(payload["user"], feed, url);
+
+    return CommandResult{"", "Item added"};
+} catch(std::exception& e) {
+    return CommandResult{"Error occured while adding item" + std::string(e.what()), ""};
+}
+
+CommandResult Executer::cmd_get_items(args_t& args) try {
+    auto token = args["token"];
+    auto feed = args["feed"];
+
+    HS256Validator signer(_secret);
+    auto [header, payload] = JWT::Decode(token, &signer);
+
+    auto items = _db.getItems(payload["user"], feed);
+    return CommandResult{"", "OK", items};
+} catch(std::exception& e) {
+    return CommandResult{"Error occured while getting items", ""};
 }

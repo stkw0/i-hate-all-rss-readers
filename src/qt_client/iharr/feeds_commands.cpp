@@ -23,7 +23,23 @@ const std::vector<QListWidgetItem*> FeedsCommands::getFeeds() {
     cmd.addArg("token", _token);
     cmd.send();
 
-    for(auto&& e : cmd.getArgsAsList()) v.emplace_back(new QFeed(e));
+    for(auto&& e : cmd.getArgsAsList()) {
+        auto new_feed = new QFeed(e);
+        for(auto& item : new_feed->content()["items"]) {
+            addItem(e, item["url"]);
+            new_feed->addItem(item["url"]);
+        }
+
+        v.emplace_back(new_feed);
+    }
 
     return v;
+}
+
+void FeedsCommands::addItem(const std::string& feed, const std::string& url) {
+    Command cmd{_c, "add_item"};
+    cmd.addArg("feed", feed);
+    cmd.addArg("url", url);
+    cmd.addArg("token", _token);
+    cmd.send();
 }

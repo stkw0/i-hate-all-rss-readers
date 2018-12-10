@@ -60,7 +60,7 @@ void MainWindow::update_feeds() try {
     QMessageBox::critical(this, tr("IHARR"), tr(e.what()), QMessageBox::Ok);
 }
 
-void MainWindow::update_login() {
+void MainWindow::update_login() try {
     Config _cfg{"iharr_qt"};
 
     Command cmd{_c, "login"};
@@ -72,6 +72,9 @@ void MainWindow::update_login() {
     _token = cmd.getArgs().at("token");
 
     update_feeds();
+} catch(std::exception& e) {
+    _log->error("{}: {}", __PRETTY_FUNCTION__, e.what());
+    QMessageBox::warning(this, tr("IHARR"), tr(e.what()), QMessageBox::Ok);
 }
 
 void MainWindow::on_listWidget_customContextMenuRequested(const QPoint& pos) {
