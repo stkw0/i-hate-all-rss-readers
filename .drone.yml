@@ -6,6 +6,7 @@ pipeline:
   build:
     image: gentoo/stage3-amd64
     commands:
-      - emerge --sync
-      - emerge -q spdlog meson
+      - emerge-webrsync -q
+      - emerge -q spdlog meson poco boost yaml-cpp
+      - meson build . && cd build && ninja
 
