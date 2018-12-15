@@ -1,4 +1,5 @@
 #include <exception>
+#include <functional>
 #include <iostream>
 #include <stdexcept>
 
@@ -6,6 +7,14 @@
 
 #include "executer.hpp"
 #include "lib/utils.hpp"
+
+#define BIND(CLASS_NAME, CMD_NAME, args)                                       \
+    { #CMD_NAME, std::bind(&CLASS_NAME::cmd_##CMD_NAME, this, args) }
+
+#define COMMAND(F) BIND(Executer, F, args)
+
+using command_map_t =
+    std::unordered_map<std::string, std::function<CommandResult(args_t&)>>;
 
 std::string Executer::interpretPacket(const std::string& packet) {
     if(packet == "") return packet;
@@ -28,28 +37,23 @@ std::string Executer::interpretPacket(const std::string& packet) {
 
 CommandResult Executer::dispatchCommand(const std::string& cmd, args_t& args) {
     std::cout << cmd << std::endl;
-    if(cmd == "login") {
-        return cmd_login(args);
-    } else if(cmd == "register") {
-        return cmd_register(args);
-    } else if(cmd == "add_feed") {
-        return cmd_add_feed(args);
-    } else if(cmd == "delete_feed") {
-        return cmd_delete_feed(args);
-    } else if(cmd == "get_feeds") {
-        return cmd_get_feeds(args);
-    } else if(cmd == "add_item") {
-        return cmd_add_item(args);
-    } else if(cmd == "get_items") {
-        return cmd_get_items(args);
-    }
 
-    return CommandResult{"Invalid command", ""};
+    command_map_t m = {
+        COMMAND(login),       COMMAND(register),  COMMAND(add_feed),
+        COMMAND(delete_feed), COMMAND(get_feeds), COMMAND(add_item),
+        COMMAND(get_items),
+    };
+
+    if(const auto func = m.find(cmd); func != m.end()) {
+        return func->second(args);
+    } else {
+        return CommandResult{"Invalid command", ""};
+    }
 }
 
 CommandResult Executer::cmd_login(args_t& args) try {
-    std::string username = args["username"];
-    std::string password = args["password"];
+    auto username = args["username"];
+    auto password = args["password"];
 
     HS256Validator signer(_secret);
     json payload = {{"user", username}};
@@ -59,6 +63,8 @@ CommandResult Executer::cmd_login(args_t& args) try {
     ret_args["token"] = token;
 
     auto db_password = _db.getUserPassword(username);
+
+    if(db_password != password) throw std::runtime_error("Incorrect");
 
     return CommandResult{"", "Correctly loged", ret_args};
 } catch(std::exception& e) {
@@ -94,6 +100,8 @@ CommandResult Executer::cmd_add_feed(args_t& args) try {
     auto feeds = _db.getFeeds(payload["user"]);
     for(auto&& f : feeds)
         if(f == url) throw std::runtime_error("Feed already present");
+
+    GetParsedFeed(url);
 
     _db.addFeed(payload["user"], url);
 

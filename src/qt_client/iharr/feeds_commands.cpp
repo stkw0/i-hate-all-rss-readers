@@ -26,8 +26,11 @@ const std::vector<QListWidgetItem*> FeedsCommands::getFeeds() {
     for(auto&& e : cmd.getArgsAsList()) {
         auto new_feed = new QFeed(e);
         for(auto& item : new_feed->content()["items"]) {
-            addItem(e, item["url"]);
-            new_feed->addItem(item["url"]);
+            try {
+                addItem(e, item["url"]);
+                new_feed->addItem(item["url"]);
+            } catch(...) {
+            }
         }
 
         v.emplace_back(new_feed);
