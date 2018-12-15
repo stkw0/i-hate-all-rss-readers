@@ -7,6 +7,7 @@ pipeline:
     image: gentoo/stage3-amd64
     commands:
       - emerge-webrsync -q
-      - emerge -q spdlog meson poco boost yaml-cpp
+      - emerge -q spdlog meson poco boost yaml-cpp sqlite
+      - git clone https://github.com/rbock/sqlpp11-connector-sqlite3 && cd sqlpp11-connector-sqlite3 && mkdir build;cd build && cmake .. && make install
       - meson build . && cd build && ninja
 
