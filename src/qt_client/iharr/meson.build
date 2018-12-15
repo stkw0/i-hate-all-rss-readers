@@ -7,7 +7,11 @@ moc_files = qt5.preprocess(moc_headers : ['widgets/mainwindow.h', 'widgets/confi
 
 c = run_command([meson.source_root() + '/meson_helpers/grabber.sh'])
 sources = c.stdout().strip().split('\n')
-run_command(['clang-format','-i','-style=file','-assume-filename=.clang-format',sources])
+
+clang_format = find_program(['clang-format'], required : false)
+if clang_format.found() == true
+	run_command(['clang-format','-i','-style=file','-assume-filename=.clang-format',sources])
+endif 
 
 yaml_cpp = cxx.find_library('yaml-cpp')
 fmt_lib = cxx.find_library('fmt')

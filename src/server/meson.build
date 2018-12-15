@@ -3,7 +3,10 @@ inc = include_directories('networking')
 c = run_command([meson.source_root() + '/meson_helpers/grabber.sh'])
 sources = c.stdout().strip().split('\n')
 
-run_command(['clang-format','-i','-style=file','-assume-filename=.clang-format',sources])
+clang_format = find_program(['clang-format'], required : false)
+if clang_format.found() == true
+	run_command(['clang-format','-i','-style=file','-assume-filename=.clang-format',sources])
+endif 
 
 boost_dep = [
     cxx.find_library('boost_system'),
