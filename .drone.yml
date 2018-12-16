@@ -1,13 +1,13 @@
 workspace:
   base: .
-  path: /
+  path: src
 
 pipeline:
   build:
     image: gentoo/stage3-amd64
     commands:
       - emerge-webrsync -q
-      - emerge -q spdlog meson poco boost yaml-cpp sqlite
-      - git clone https://github.com/rbock/sqlpp11-connector-sqlite3 && cd sqlpp11-connector-sqlite3 && mkdir build;cd build && cmake .. && make install
+      - emerge --jobs=2 -q spdlog meson poco boost yaml-cpp sqlite dev-vcs/git
+      - git clone https://github.com/SqliteModernCpp/sqlite_modern_cpp && cd sqlite_modern_cpp && ./configure && make install
       - meson build . && cd build && ninja
 

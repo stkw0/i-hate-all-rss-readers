@@ -11,10 +11,8 @@ endif
 boost_dep = [
     cxx.find_library('boost_system'),
 ]
-sql_dep = [
-    cxx.find_library('sqlpp11-connector-sqlite3'),
-    cxx.find_library('sqlite3')
-]
+
+sql_dep = [cxx.find_library('sqlite3')]
 
 thread_dep = dependency('threads')
 
