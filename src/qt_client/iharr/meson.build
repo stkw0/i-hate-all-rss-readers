@@ -1,9 +1,13 @@
 qt5 = import('qt5')
 qt5_dep = dependency('qt5', modules: ['Core', 'Gui', 'Widgets', 'Network', 'WebEngineWidgets'])
-inc = include_directories('/usr/include/qt5/')
+inc_qt5 = include_directories('/usr/include/qt5/')
+
+# For debian-based
+inc_qt5_debian = include_directories('/usr/include/x86_64-linux-gnu/qt5')
+
 moc_files = qt5.preprocess(moc_headers : ['widgets/mainwindow.h', 'widgets/configuration.h', 'widgets/newchannel.h'],
                            ui_files: ['widgets/mainwindow.ui', 'widgets/configuration.ui', 'widgets/newchannel.ui'],
-                           include_directories: inc)
+                           include_directories: [inc, inc_qt5_debian])
 
 c = run_command([meson.source_root() + '/meson_helpers/grabber.sh'])
 sources = c.stdout().strip().split('\n')
